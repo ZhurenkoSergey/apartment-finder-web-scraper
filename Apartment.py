@@ -2,6 +2,7 @@ import requests
 import pandas as pd
 from bs4 import BeautifulSoup
 from time import sleep
+import re
 
 data = []
 
@@ -16,7 +17,9 @@ for i in range(1,26):
     for Apartment in Apartments:
         try:
             name = Apartment.find('h6', class_='css-1wxaaza').text
-            price = Apartment.find('p', class_='css-13afqrm').text
+            price_text = Apartment.find('p', class_='css-13afqrm').text
+            match = re.search(r'\d[\d\s]*', price_text)
+            price = match.group(0).replace(' ', '')
             link = 'https://www.olx.ua' + Apartment.find('a', class_='css-z3gu2d').get('href')
         except:
             name = '-'
